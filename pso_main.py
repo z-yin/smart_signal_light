@@ -1,154 +1,1 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Dec 12 10:07:21 2017
-
-@author: Lios
-"""
-
-import data_process as dp
-import random  
-import copy  
-import adapt_func as adp
-  
-birds = 1000  # 种群数，如果报错，可以把初始化的1000放大
-pos = []  
-speed = []  
-bestpos = []  
-birdsbestpos = []
-result = []  # 存和为周期长的几个随机数，二维列表
-best_location = []
-phase_result = []
-w = 0.8  
-c1 = 2   
-c2 = 2  
-r1 = 0.6  
-r2 = 0.3  
-C = 200    # 周期时长，可修改
-phase = [4, 4, 3, 5, 3, 4, 3]
-minu = [[35, 8, 10, 35], [8, 35, 8, 35], [10, 35, 35], [10, 35, 10, 8, 35], [10, 35, 35], [10, 35, 10, 35], [10, 35, 35]]
-
-a = dp.DataProcess()
-a.process()
-
-print("a over")
-
-
-def generate_rand(lst):
-    k = 0
-    list1 = []
-    list2 = []
-    for j in range(10000):
-        mark = 0
-        list1.append([])
-        list2.append([])
-        count = 0
-        for i in range(phase[k]):
-            count = count + 1
-            if count == phase[k]:
-                break
-            num = random.randint(minu[k][i], 200)
-            list1[j].append(num)
-        list1[j].sort()
-        list2[j].append(list1[j][0])
-        num = phase[k] - 2
-        for i in range(num):
-            list2[j].append(list1[j][i + 1] - list1[j][i])
-        list2[j].append(200 - list1[j][num])
-        while mark == 0:
-            if len(list2[j]) != 5:
-                list2[j].append(0)
-            else:
-                mark = 1
-    for j in range(10000):
-        count = 0
-        for i in range(4):
-            if list2[j][i] >= minu[k][i]:
-                count = count + 1
-        if count == 4:
-            lst.append(list2[j])
-
-
-def generate_rand_vec(lst):
-    num = random.randint(0, len(result) - 1)
-    lst.append(result[num])
-
-
-def cal_dis(t):
-    dis = adp.delay(a, t)
-    return dis
-
-
-def FindBirdsMostPos():
-    best = cal_dis(bestpos[0])
-    index = 0
-    for i in range(birds):
-        temp = cal_dis(bestpos[i])
-        if temp < best:
-            best = temp
-            index = i
-    best_location.append(index)
-    return bestpos[index]
-
-
-def NumMulVec(num,lst):
-    for i in range(len(lst)):
-        lst[i] *= num
-    return lst
-
-
-def VecSubVec(list1,list2):
-    for i in range(len(list1)):
-        list1[i] -= list2[i]
-    return list1
-
-
-def VecAddVec(list1,list2):
-    for i in range(len(list1)):
-        list1[i] += list2[i]
-    return list1
-
-
-def UpdateSpeed():
-    for i in range(birds):
-        temp1 = NumMulVec(w,speed[i][:])
-        temp2 = VecSubVec(bestpos[i][:],pos[i])
-      #  r1=random.random()
-        temp2 = NumMulVec(c1*r1,temp2[:])
-        temp1 = VecAddVec(temp1[:],temp2)
-        temp2 = VecSubVec(birdsbestpos[:],pos[i])
-      #  r2=random.random()
-        temp2 = NumMulVec(c2*r2,temp2[:])
-        speed[i] = VecAddVec(temp1,temp2)
-
-
-def UpdatePos():
-    global bestpos, birdsbestpos
-    for i in range(birds):
-        VecAddVec(pos[i],speed[i])
-        if cal_dis(pos[i])<cal_dis(bestpos[i]):
-            bestpos[i] = copy.deepcopy(pos[i])
-    birdsbestpos = FindBirdsMostPos()
-
-generate_rand(result)
-print(len(result))
-for i in range(birds):
-    generate_rand_vec(pos)
-    generate_rand_vec(speed)
-    bestpos.append([])
-    bestpos[i] = copy.deepcopy(pos[i])
-
-print(bestpos[0])
-birdsbestpos = FindBirdsMostPos()
-
-for i in range(100):   # 迭代次数，可修改
-    print("i = ", i)
-    Dis = cal_dis(birdsbestpos)
-    phase_result.append(Dis)
-    UpdateSpeed()
-    UpdatePos()
-
-i = phase_result.index(min(phase_result))
-print(pos[best_location[i]])
-# 如果第i次结果最优，结果在pos[j]:j = best_location[i]
-
-
+# -*- coding: utf-8 -*-import data_process as dpimport random  import copy  import adapt_func as adpimport datetime as dtimport numpy as npfrom multiprocessing import Pool, cpu_countdef generate_rand(lst):    k = 4    list1 = []    list2 = []    for j in range(10000):        mark = 0        list1.append([])        list2.append([])        count = 0        for i in range(phase[k]):            count = count + 1            if count == phase[k]:                break            num = random.randint(minu[k][i], 200)            list1[j].append(num)        list1[j].sort()        list2[j].append(list1[j][0])        num = phase[k] - 2        for i in range(num):            list2[j].append(list1[j][i + 1] - list1[j][i])        list2[j].append(200 - list1[j][num])        while mark == 0:            if len(list2[j]) != 5:                list2[j].append(0)            else:                mark = 1    for j in range(10000):        count = 0        for i in range(4):            if list2[j][i] >= minu[k][i]:                count = count + 1        if count == 4:            lst.append(list2[j])def generate_rand_vec(lst):    num = random.randint(0, (len(result)) - 1)    lst.append(result[num])def cal_dis(t):    dis = adp.delay(a, t)    return disdef UpdateSpeed():    global speed    poly1 = w * np.array(speed)    poly2 = c1 * r1 * (np.array(bestpos) - np.array(pos))    poly3 = c2 * r2 * (np.array(birdsbestpos) - np.array(pos))    speed = poly1 + poly2 + poly3def UpdatePos(rst):    global bestpos, birdsbestpos, pos    p = np.array(minu[4])    pos_tmp = np.array(pos) + np.array(speed)    is_to_constrain = pos_tmp < p    is_not_to_constrain = pos_tmp >= p    pos_tmp = pos_tmp * is_not_to_constrain + p * is_to_constrain    max_time = 200 - 3*p    is_to_constrain = pos_tmp > max_time    is_not_to_constrain = pos_tmp <= max_time    pos_tmp = pos_tmp * is_not_to_constrain + max_time * is_to_constrain    pos = list(pos_tmp)    if cpu_count() > 8:        pool = Pool(cpu_count()-8)    else:        pool = Pool(cpu_count())        # pool = Pool(1)    tmp = []    for i in range(birds):        tmp.append(pool.apply_async(cal_dis, (pos[i],)))    pool.close()    pool.join()    tmp_dis = [x.get() for x in tmp]    tmp_dis = np.array(tmp_dis)    is_to_change = tmp_dis < rst    is_not_to_change = tmp_dis >= rst    rst = tmp_dis * is_to_change + rst * is_not_to_change    is_to_change = is_to_change.reshape(birds, 1)    is_not_to_change = is_not_to_change.reshape((birds, 1))    bestpos = np.array(pos) * is_to_change + np.array(bestpos) * is_not_to_change    bestpos = list(bestpos)    idmin = rst.argmin()    birdsbestpos = bestpos[idmin]    best_location.append(idmin)    return rstdef FindBirdsMostPos():    print "cpu_count: " + str(cpu_count())    if cpu_count() > 8:        pool = Pool(cpu_count()-8)    else:        pool = Pool(cpu_count())        # pool = Pool(1)    rst1 = []    for i in range(birds):        rst1.append(pool.apply_async(cal_dis, (bestpos[i],)))    pool.close()    pool.join()    # print "rst[1]: " + str(rst1[1].get())    rst = [x.get() for x in rst1]    rst = np.array(rst)    idmin = rst.argmin()    best_location.append(idmin)    return {"birdsbestpos": bestpos[idmin], "rst": rst}if __name__ == "__main__":    birds = 500  # 种群数，如果报错，可以把初始化的1000放大    iter_num = 100    pos = []    speed = []    bestpos = []    birdsbestpos = []    result = []  # 存和为周期长的几个随机数，二维列表    best_location = []    # phase_result = []    w = 0.8    c1 = 2    c2 = 2    r1 = 0.6    r2 = 0.3    C = 200  # 周期时长，可修改    phase = [4, 4, 3, 5, 3, 4, 3]    minu = [[35, 8, 10, 35], [8, 35, 8, 35], [10, 35, 35], [10, 35, 10, 8, 35], [10, 35, 35, 0, 0], [10, 35, 10, 35],            [10, 35, 35]]    minu = np.array(minu)    a = dp.DataProcess()    a.process()    print "a over"    generate_rand(result)    # print len(result)    for i in range(birds):        generate_rand_vec(pos)        generate_rand_vec(speed)        bestpos.append([])        bestpos[i] = copy.deepcopy(pos[i])    # print bestpos[0]    print "number of bird: " + str(birds)    print "number of iteration: " + str(iter_num)    rst = np.array([])    t = dt.datetime.now()    cache = FindBirdsMostPos()    birdsbestpos = cache["birdsbestpos"]    rst = cache["rst"]    for m in range(iter_num):   # 迭代次数，可修改        print "m = " + str(m)        Dis = cal_dis(birdsbestpos)        # phase_result.append(Dis)        UpdateSpeed()        rst = UpdatePos(rst)        print min(rst)    # i = phase_result.index(min(phase_result))    print bestpos[best_location[-1]]    print "rst: " + str(rst[best_location[-1]])    print "total time: " + str((dt.datetime.now() - t).total_seconds())    print ""    # 如果第i次结果最优，结果在pos[j]:j = best_location[i]    # r = cal_dis([34, 46, 18, 96, 6])    # print "r= " + str(r)
