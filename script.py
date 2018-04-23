@@ -10,7 +10,7 @@ with open("not_exam_para.txt", "w") as res:
                 with open(name, "r") as f:
                     lines = f.readlines()
                     lines = filter(lambda x: not re.match(r'^\s*$', x), lines)
-                    # if not lines[-1].startswith("total time"):
+                # if not lines[-1].startswith("total time"):
                     res.write(name)
                     res.write(" : ")
                     res.write(lines[-1])

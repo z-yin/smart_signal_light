@@ -3616,7 +3616,7 @@ static PyObject *__pyx_pf_10adapt_func_12delay(CYTHON_UNUSED PyObject *__pyx_sel
  *     last_i = 0
  *     delay_phase = 0             # <<<<<<<<<<<<<<
  *     for day in [(5, 4)]:  # SysStartEndTime.start_dic:
- *         for h in range(4, 5):
+ *         for h in range(0, 1):
  */
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_delay_phase = __pyx_int_0;
@@ -3625,7 +3625,7 @@ static PyObject *__pyx_pf_10adapt_func_12delay(CYTHON_UNUSED PyObject *__pyx_sel
  *     last_i = 0
  *     delay_phase = 0
  *     for day in [(5, 4)]:  # SysStartEndTime.start_dic:             # <<<<<<<<<<<<<<
- *         for h in range(4, 5):
+ *         for h in range(0, 1):
  *             for j in range(12):
  */
   __pyx_t_1 = __pyx_tuple__2; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
@@ -3643,11 +3643,11 @@ static PyObject *__pyx_pf_10adapt_func_12delay(CYTHON_UNUSED PyObject *__pyx_sel
     /* "adapt_func.pyx":183
  *     delay_phase = 0
  *     for day in [(5, 4)]:  # SysStartEndTime.start_dic:
- *         for h in range(4, 5):             # <<<<<<<<<<<<<<
+ *         for h in range(0, 1):             # <<<<<<<<<<<<<<
  *             for j in range(12):
  *                 st_tm = dt.datetime.now()
  */
-    for (__pyx_t_5 = 4; __pyx_t_5 < 5; __pyx_t_5+=1) {
+    for (__pyx_t_5 = 0; __pyx_t_5 < 1; __pyx_t_5+=1) {
       __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 183, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_XDECREF_SET(__pyx_v_h, __pyx_t_2);
@@ -3655,7 +3655,7 @@ static PyObject *__pyx_pf_10adapt_func_12delay(CYTHON_UNUSED PyObject *__pyx_sel
 
       /* "adapt_func.pyx":184
  *     for day in [(5, 4)]:  # SysStartEndTime.start_dic:
- *         for h in range(4, 5):
+ *         for h in range(0, 1):
  *             for j in range(12):             # <<<<<<<<<<<<<<
  *                 st_tm = dt.datetime.now()
  *                 start_time = 0
@@ -3667,7 +3667,7 @@ static PyObject *__pyx_pf_10adapt_func_12delay(CYTHON_UNUSED PyObject *__pyx_sel
         __pyx_t_2 = 0;
 
         /* "adapt_func.pyx":185
- *         for h in range(4, 5):
+ *         for h in range(0, 1):
  *             for j in range(12):
  *                 st_tm = dt.datetime.now()             # <<<<<<<<<<<<<<
  *                 start_time = 0
@@ -4264,7 +4264,7 @@ static PyObject *__pyx_pf_10adapt_func_12delay(CYTHON_UNUSED PyObject *__pyx_sel
  *     last_i = 0
  *     delay_phase = 0
  *     for day in [(5, 4)]:  # SysStartEndTime.start_dic:             # <<<<<<<<<<<<<<
- *         for h in range(4, 5):
+ *         for h in range(0, 1):
  *             for j in range(12):
  */
   }
@@ -4502,7 +4502,7 @@ static int __Pyx_InitCachedConstants(void) {
  *     last_i = 0
  *     delay_phase = 0
  *     for day in [(5, 4)]:  # SysStartEndTime.start_dic:             # <<<<<<<<<<<<<<
- *         for h in range(4, 5):
+ *         for h in range(0, 1):
  *             for j in range(12):
  */
   __pyx_tuple_ = PyTuple_Pack(2, __pyx_int_5, __pyx_int_4); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 182, __pyx_L1_error)

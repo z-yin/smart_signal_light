@@ -180,7 +180,7 @@ def delay(a, t):
     last_i = 0
     delay_phase = 0
     for day in [(5, 4)]:  # SysStartEndTime.start_dic:
-        for h in range(4, 5):
+        for h in range(6,7):
             for j in range(12):
                 st_tm = dt.datetime.now()
                 start_time = 0
